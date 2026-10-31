@@ -354,8 +354,6 @@ const DRAG_OPTIONS = {
 	dragClass: 'task-dragging',
 	delayOnTouchOnly: true,
 	delay: 1000,
-	// Start scrolling the board well before the edge, sortable's default 30px is too small to reach off-screen buckets.
-	scrollSensitivity: 1000, // TEMP DEBUG experiment
 } as const
 
 const MIN_SCROLL_HEIGHT_PERCENT = 0.25
@@ -395,7 +393,10 @@ if (typeof document !== 'undefined') {
 		dragoverCount++
 		const k = document.querySelector('.kanban') as HTMLElement | null
 		if (!k) return
-		dbg.textContent = `dragover#${dragoverCount} x=${e.clientX} y=${e.clientY} right=${Math.round(k.getBoundingClientRect().right)} sl=${k.scrollLeft} cw=${k.clientWidth} sw=${k.scrollWidth} moves=${moveCount}`
+		if (dragoverCount === 1) {
+			k.scrollLeft = 40
+		}
+		dbg.textContent = `dragover#${dragoverCount} x=${e.clientX} y=${e.clientY} right=${Math.round(k.getBoundingClientRect().right)} sl=${k.scrollLeft} cw=${k.clientWidth} sw=${k.scrollWidth} ov=${getComputedStyle(k).overflowX} tgt=${(e.target as HTMLElement).className}`
 	}, true)
 	document.addEventListener('mousemove', (e: MouseEvent) => {
 		moveCount++
