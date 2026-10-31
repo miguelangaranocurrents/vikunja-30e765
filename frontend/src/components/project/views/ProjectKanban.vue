@@ -381,29 +381,6 @@ const drag = ref(false)
 const dragBucket = ref(false)
 const sourceBucket = ref(0)
 
-// TEMP DEBUG (remove)
-if (typeof document !== 'undefined') {
-	const dbg = document.createElement('pre')
-	dbg.id = 'dbg-kanban'
-	dbg.style.cssText = 'position:fixed;top:0;left:0;z-index:99999;background:#fff;color:#000;font:14px monospace;padding:4px;margin:0;'
-	document.body.appendChild(dbg)
-	let dragoverCount = 0
-	let moveCount = 0
-	document.addEventListener('dragover', (e: DragEvent) => {
-		dragoverCount++
-		const k = document.querySelector('.kanban') as HTMLElement | null
-		if (!k) return
-		if (dragoverCount === 1) {
-			k.scrollLeft = 40
-		}
-		dbg.textContent = `dragover#${dragoverCount} x=${e.clientX} y=${e.clientY} right=${Math.round(k.getBoundingClientRect().right)} sl=${k.scrollLeft} cw=${k.clientWidth} sw=${k.scrollWidth} ov=${getComputedStyle(k).overflowX} tgt=${(e.target as HTMLElement).className}`
-	}, true)
-	document.addEventListener('mousemove', (e: MouseEvent) => {
-		moveCount++
-		if (dragoverCount === 0) dbg.textContent = `mousemove#${moveCount} x=${e.clientX} buttons=${e.buttons} dragover=0`
-	}, true)
-}
-
 const showBucketDeleteModal = ref(false)
 const bucketToDelete = ref(0)
 const bucketTitleEditable = ref(false)
@@ -923,6 +900,12 @@ $filter-container-height: '1rem - #{$switch-view-height}';
 	&-bucket-container {
 		display: flex;
 		list-style: none;
+	}
+
+	// Buckets stretch to the full board height, so their whole column accepts dropped tasks and
+	// a task can be dragged to the edge of the board, which autoscrolls it.
+	& .kanban-bucket-container {
+		block-size: 100%;
 	}
 
 	.ghost {
