@@ -381,6 +381,26 @@ const drag = ref(false)
 const dragBucket = ref(false)
 const sourceBucket = ref(0)
 
+// TEMP DEBUG (remove)
+if (typeof document !== 'undefined') {
+	const dbg = document.createElement('pre')
+	dbg.id = 'dbg-kanban'
+	dbg.style.cssText = 'position:fixed;top:0;left:0;z-index:99999;background:#fff;color:#000;font:14px monospace;padding:4px;margin:0;'
+	document.body.appendChild(dbg)
+	let dragoverCount = 0
+	document.addEventListener('dragover', (e: DragEvent) => {
+		dragoverCount++
+		const k = document.querySelector('.kanban') as HTMLElement | null
+		const ul = document.querySelector('.kanban ul.kanban-bucket-container') as HTMLElement | null
+		const li = document.querySelector('.kanban .bucket') as HTMLElement | null
+		if (!k) return
+		if (dragoverCount === 1) {
+			k.scrollLeft = 40
+		}
+		dbg.textContent = `dragover#${dragoverCount} x=${e.clientX} y=${e.clientY} kH=${Math.round(k.getBoundingClientRect().height)} ulH=${Math.round(ul?.getBoundingClientRect().height ?? -1)} liH=${Math.round(li?.getBoundingClientRect().height ?? -1)} sl=${k.scrollLeft} tgt=${(e.target as HTMLElement).className}`
+	}, true)
+}
+
 const showBucketDeleteModal = ref(false)
 const bucketToDelete = ref(0)
 const bucketTitleEditable = ref(false)
