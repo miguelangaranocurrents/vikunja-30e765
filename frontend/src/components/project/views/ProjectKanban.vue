@@ -394,9 +394,6 @@ if (typeof document !== 'undefined') {
 		const ul = document.querySelector('.kanban ul.kanban-bucket-container') as HTMLElement | null
 		const li = document.querySelector('.kanban .bucket') as HTMLElement | null
 		if (!k) return
-		if (dragoverCount === 1) {
-			k.scrollLeft = 40
-		}
 		dbg.textContent = `dragover#${dragoverCount} x=${e.clientX} y=${e.clientY} kH=${Math.round(k.getBoundingClientRect().height)} ulH=${Math.round(ul?.getBoundingClientRect().height ?? -1)} liH=${Math.round(li?.getBoundingClientRect().height ?? -1)} sl=${k.scrollLeft} tgt=${(e.target as HTMLElement).className}`
 	}, true)
 }
